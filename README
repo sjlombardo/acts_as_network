@@ -1,6 +1,6 @@
 = acts_as_network
 
-ActsAsNetwork is intended to simplify the definition 
+acts_as_network is intended to simplify the definition 
 and storage of reciprocal relationships between entities using
 ActiveRecord, exposing a "network" of 2-way connections between
 records. It does this in DRY way using only <b>a single record</b>
@@ -13,25 +13,26 @@ a "friend" relationship in one direction implies the reverse
 relationship (when Jack is a friend of Jane then Jane should also
 be a friend of Jack). 
 
-{Zetetic LLC}[http://www.zetetic.net] extracted ActsAsNetwork from
+{Zetetic LLC}[http://www.zetetic.net] extracted acts_as_network from
 PingMe[http://www.gopingme.com] where it drives the social 
 networking features of the site.
 
-== INSTALLATION
+== INSTALLATION (git on edge rails)
 
-  % script/plugin discover
-  % script/plugin install acts_as_network
+  % cd rails_project_path
+  % ./script/plugin install git://github.com/sjlombardo/acts_as_network.git
   % rake doc:plugins
-  
-or 
 
+== INSTALLATION (subversion, rails <= 2.0.2))
+ 
+  % cd rails_project_path
   % script/plugin source http://actsasnetwork.rubyforge.org/svn/plugins
   % script/plugin install acts_as_network  
-  % rake doc:plugins
-  
-== SUBVERSION
+  % rake doc:plugins 
 
-  http://actsasnetwork.rubyforge.org/svn/plugins/acts_as_network
+== GitHub
+
+  http://github.com/sjlombardo/acts_as_network/tree/master
 
 = INTRODUCTION
 
