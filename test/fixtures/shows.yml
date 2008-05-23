@@ -1,0 +1,34 @@
+myth_busters:
+  id: 0
+  name: Myth Busters
+  channel_id: 0
+
+deadliest_catch:
+  id: 1
+  name: Deadliest Catch
+  channel_id: 0
+  
+dirty_jobs:
+  id: 2
+  name: Dirty Jobs
+  channel_id: 0
+
+monk:
+  id: 3
+  name: Monk
+  channel_id: 1
+
+psych:
+  id: 4
+  name: Psych
+  channel_id: 1
+
+burn_notice:
+  id: 5
+  name: Burn Notice
+  channel_id: 1
+
+mad_men:
+  id: 6
+  name: Mad Men
+  channel_id: 2

@@ -1,0 +1,27 @@
+carmen_helene:
+  id: 0
+  person_id: 4
+  person_id_target: 0
+  is_accepted: t
+
+helene_stephen:
+  id: 1
+  person_id: 0
+  person_id_target: 1
+
+helene_vincent:
+  id: 2
+  person_id: 0
+  person_id_target: 2
+  is_accepted: t
+  
+mary_stephen:
+  id: 3
+  person_id: 3
+  person_id_target: 1
+  
+stephen_vincent:
+  id: 4
+  person_id: 1
+  person_id_target: 2
+  is_accepted: f
