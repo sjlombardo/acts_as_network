@@ -1,8 +1,8 @@
 author: Zetetic LLC (Stephen Lombardo)
 summary: Simplify the definition and storage of "network" relationships, especially useful for social networks.
 homepage: http://www.zetetic.net
-plugin: http://svn.zetetic.net/svn/plugins/acts_as_network
+plugin: git://github.com/sjlombardo/acts_as_network.git
 license: MIT
-version: 0.1
-rails_version: 1.2+
+version: 0.2
+rails_version: 2.0+
 
