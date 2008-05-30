@@ -250,9 +250,7 @@ module Zetetic #:nodoc:
             # records. i.e. if People acts_as_network :contacts :through => :invites, this method
             # is defined as def invites
             class_eval <<-EOV
-              def #{through_sym}
-                UnionCollection.new(self.#{through_sym}_in, self.#{through_sym}_out)
-              end
+              acts_as_union :#{through_sym}, [ :#{through_sym}_in, :#{through_sym}_out ]
             EOV
               
           end
@@ -260,9 +258,7 @@ module Zetetic #:nodoc:
           # define the accessor method for the reciprocal network relationship view itself. 
           # i.e. if People acts_as_network :contacts, this method is defind as def contacts
           class_eval <<-EOV
-            def #{relationship}
-              UnionCollection.new(self.#{relationship}_in, self.#{relationship}_out)
-            end
+            acts_as_union :#{relationship}, [ :#{relationship}_in, :#{relationship}_out ]
           EOV
         end
       end
@@ -275,8 +271,8 @@ module Zetetic #:nodoc:
       
       module ClassMethods
         def acts_as_union(relationship, methods)
-          # define the accessor method for the reciprocal network relationship view itself. 
-          # i.e. if People acts_as_network :contacts, this method is defind as def contacts
+          # define the accessor method for the union.
+          # i.e. if People acts_as_union :jobs, this method is defined as def jobs
           class_eval <<-EOV
             def #{relationship}
               UnionCollection.new(#{methods.collect{|m| "self.#{m.to_s}"}.join(',')})
