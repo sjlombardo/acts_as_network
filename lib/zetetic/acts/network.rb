@@ -267,5 +267,23 @@ module Zetetic #:nodoc:
         end
       end
     end
-  end
+  
+    module Union
+      def self.included(base)
+        base.extend ClassMethods
+      end
+      
+      module ClassMethods
+        def acts_as_union(relationship, methods)
+          # define the accessor method for the reciprocal network relationship view itself. 
+          # i.e. if People acts_as_network :contacts, this method is defind as def contacts
+          class_eval <<-EOV
+            def #{relationship}
+              UnionCollection.new(#{methods.collect{|m| "self.#{m.to_s}"}.join(',')})
+            end
+          EOV
+        end
+      end
+    end # module Union
+  end  # module Acts
 end

@@ -2,6 +2,9 @@ require File.join(File.dirname(__FILE__), 'test_helper')
 
 class Channel < ActiveRecord::Base
   has_many :shows
+  has_many :premium_shows, :class_name => 'Show', :conditions => ['package = ?', 'premium']
+  has_many :mega_shows, :class_name => 'Show', :conditions => ['package = ?', 'mega']
+  acts_as_union :pay_shows, [ :premium_shows, :mega_shows ]
 end
 
 class Show < ActiveRecord::Base
@@ -37,6 +40,15 @@ end
 class Array
   def ids
     collect &:id
+  end
+end
+
+class ActsAsUntionTest < Test::Unit::TestCase
+  fixtures :shows, :channels
+  
+  def test_union_method
+    assert_equal 0, channels(:abc).pay_shows.length
+    assert_equal 3, channels(:discovery).pay_shows.length
   end
 end
 

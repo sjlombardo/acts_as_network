@@ -2,33 +2,46 @@ myth_busters:
   id: 0
   name: Myth Busters
   channel_id: 0
+  package: premium
 
 deadliest_catch:
   id: 1
   name: Deadliest Catch
   channel_id: 0
+  package: mega
   
 dirty_jobs:
   id: 2
   name: Dirty Jobs
   channel_id: 0
+  package: mega
 
 monk:
   id: 3
   name: Monk
   channel_id: 1
+  package: basic
 
 psych:
   id: 4
   name: Psych
   channel_id: 1
+  package: basic
 
 burn_notice:
   id: 5
   name: Burn Notice
   channel_id: 1
+  package: premium
 
 mad_men:
   id: 6
   name: Mad Men
   channel_id: 2
+  package: premium
+  
+action_news: 
+  id: 7
+  name: Action News
+  channel_id: 3
+  package: basic

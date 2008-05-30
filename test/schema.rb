@@ -7,6 +7,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :shows, :force => true do |t|
     t.column :name, :string
     t.column :channel_id, :integer
+    t.column :package, :string
   end
 
   # people
