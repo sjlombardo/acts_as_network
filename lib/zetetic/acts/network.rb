@@ -60,7 +60,7 @@ module Zetetic #:nodoc:
     # * <tt>find_by_*</tt> - works as expected, behaving like <tt>find :first</tt>
     # * <tt>find_all_by_*</tt> - works as expected like <tt>find :all</tt>
     #
-    class UnionCollection < Array
+    class UnionCollection
       
       # UnionCollection should be initialized with a list of ActiveRecord collections
       #
@@ -72,8 +72,6 @@ module Zetetic #:nodoc:
       def initialize(*sets)
         @sets = sets || []
         @sets.compact!     # remove nil elements
-        @sets.each{|set| self.concat set unless set.nil?} unless @sets.nil?
-        uniq!
       end
       
       # Emulates the ActiveRecord::base.find method. 
@@ -90,6 +88,12 @@ module Zetetic #:nodoc:
       end
   
       private
+      
+      def load_sets
+        @arr = []
+        @sets.each{|set| @arr.concat set unless set.nil?} unless @sets.nil?
+        @arr.uniq!
+      end
       
       # start by passing the find to set 0. If no results are returned
       # pass the find on to set 1, and so on.
@@ -142,13 +146,15 @@ module Zetetic #:nodoc:
       end
       
       # Handle find_by convienince methods
-      def method_missing(method_id, *args)
+      def method_missing(method_id, *args, &block)
         if method_id.to_s =~ /^find_all_by/
-          find_all method_id, *args
+          find_all method_id, *args, &block
         elsif method_id.to_s =~ /^find_by/
-          find_initial method_id, *args
+          find_initial method_id, *args, &block
         else
-          super
+          debugger
+          load_sets
+          @arr.send method_id, *args, &block
         end
       end
     end

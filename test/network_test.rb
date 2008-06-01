@@ -43,15 +43,6 @@ class Array
   end
 end
 
-class ActsAsUntionTest < Test::Unit::TestCase
-  fixtures :shows, :channels
-  
-  def test_union_method
-    assert_equal 0, channels(:abc).pay_shows.length
-    assert_equal 3, channels(:discovery).pay_shows.length
-  end
-end
-
 class UnionCollectionTest < Test::Unit::TestCase
   fixtures :shows, :channels
   
@@ -131,13 +122,13 @@ class UnionCollectionTest < Test::Unit::TestCase
   
   def test_empty_sets
     assert_equal Zetetic::Acts::UnionCollection.new().size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new(), []
+    assert_equal Zetetic::Acts::UnionCollection.new().to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new([],[]).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],[]), []
+    assert_equal Zetetic::Acts::UnionCollection.new([],[]).to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil), []
+    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new([],nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],nil), []
+    assert_equal Zetetic::Acts::UnionCollection.new([],nil).to_ary, []
   end
   
   def test_mixed_sets
@@ -163,9 +154,31 @@ class UnionCollectionTest < Test::Unit::TestCase
     assert_equal channels(:discovery).shows.size, union.size
     assert_equal channels(:discovery).shows.size, union.find(:all).size
   end
+  
+  def test_lazy_load
+    # internal array should start out nil
+    assert_nil @union.instance_variable_get(:@arr)
+    
+    # finder operations shouldn't affect state
+    @union.find(0)
+    assert_nil @union.instance_variable_get(:@arr)
+    
+    # array operations should cause data load
+    @union.collect{|a| a}
+    assert !@union.instance_variable_get(:@arr).empty?
+  end
 end
 
-class NetworkTest < Test::Unit::TestCase
+class ActsAsUntionTest < Test::Unit::TestCase
+  fixtures :shows, :channels
+  
+  def test_union_method
+    assert_equal 0, channels(:abc).pay_shows.length
+    assert_equal 3, channels(:discovery).pay_shows.length
+  end
+end
+
+class ActsAsNetworkTest < Test::Unit::TestCase
   fixtures :people, :people_people, :invites
 
   def test_habtm_assignments
@@ -230,7 +243,7 @@ class NetworkTest < Test::Unit::TestCase
 
     jane.reload and jack.reload and alex.reload
 
-    assert_equal [alex], jack.colleagues.find(:all, :conditions => { :name => "Alex" })
+    assert_equal [alex].to_ary, jack.colleagues.find(:all, :conditions => { :name => "Alex" }).to_ary
   end
   
   def test_outbound_habtm
