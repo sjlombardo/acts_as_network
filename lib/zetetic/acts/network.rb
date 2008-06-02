@@ -87,6 +87,11 @@ module Zetetic #:nodoc:
         end
       end
   
+      def to_a
+        load_sets
+        @arr
+      end
+      
       private
       
       def load_sets
@@ -152,7 +157,6 @@ module Zetetic #:nodoc:
         elsif method_id.to_s =~ /^find_by/
           find_initial method_id, *args, &block
         else
-          debugger
           load_sets
           @arr.send method_id, *args, &block
         end

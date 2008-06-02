@@ -122,13 +122,13 @@ class UnionCollectionTest < Test::Unit::TestCase
   
   def test_empty_sets
     assert_equal Zetetic::Acts::UnionCollection.new().size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new().to_ary, []
+    assert_equal Zetetic::Acts::UnionCollection.new().to_a, []
     assert_equal Zetetic::Acts::UnionCollection.new([],[]).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],[]).to_ary, []
+    assert_equal Zetetic::Acts::UnionCollection.new([],[]).to_a, []
     assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).to_ary, []
+    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).to_a, []
     assert_equal Zetetic::Acts::UnionCollection.new([],nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],nil).to_ary, []
+    assert_equal Zetetic::Acts::UnionCollection.new([],nil).to_a, []
   end
   
   def test_mixed_sets
@@ -243,7 +243,7 @@ class ActsAsNetworkTest < Test::Unit::TestCase
 
     jane.reload and jack.reload and alex.reload
 
-    assert_equal [alex].to_ary, jack.colleagues.find(:all, :conditions => { :name => "Alex" }).to_ary
+    assert_equal [alex].to_a, jack.colleagues.find(:all, :conditions => { :name => "Alex" }).to_a
   end
   
   def test_outbound_habtm
