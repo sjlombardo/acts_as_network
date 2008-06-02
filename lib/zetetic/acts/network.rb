@@ -218,7 +218,7 @@ module Zetetic #:nodoc:
         # * <tt>:foreign_key</tt> - name of the foreign key for the origin side of relation - 
         #   i.e. person_id.
         # * <tt>:association_foreign_key</tt> - name of the foreign key for the target side, 
-        #   i.e. erson_id_target. Defaults to the same value as +foreign_key+ with a <tt>_target</tt> suffix
+        #   i.e. person_id_target. Defaults to the same value as +foreign_key+ with a <tt>_target</tt> suffix
         # * <tt>:conditions</tt> - optional, standard ActiveRecord SQL contition clause
         #
         def acts_as_network(relationship, options = {})
@@ -280,6 +280,29 @@ module Zetetic #:nodoc:
       end
       
       module ClassMethods
+        # = acts_as_union
+        # acts_as_union simply presents a union'ed view of one or more ActiveRecord 
+        # relationships (has_many or has_and_belongs_to_many, acts_as_network, etc).
+        # 
+        #   class Person < ActiveRecord::Base
+        #     acts_as_network :friends
+        #     acts_as_network :colleagues, :through => :invites, :foreign_key => 'person_id', 
+        #                     :conditions => ["is_accepted = 't'"]
+        #     acts_as_union   :aquantainces, [:friends, :colleagues]
+        #   end
+        #
+        # In this case a call to the +aquantainces+ method will return a UnionCollection on both 
+        # a person's +friends+ and their +colleagues+. Likewise, finder operations will work accross 
+        # the two distinct sets as if they were one. Thus, for the following code
+        # 
+        #   stephen = Person.find_by_name('Stephen')
+        #   # search for user by login
+        #   billy = stephen.aquantainces.find_by_name('Billy')
+        #
+        # both Stephen's +friends+ and +colleagues+ collections would be searched for someone named Billy.
+        # 
+        # +acts_as_union+ doesn't accept any options.
+        #
         def acts_as_union(relationship, methods)
           # define the accessor method for the union.
           # i.e. if People acts_as_union :jobs, this method is defined as def jobs

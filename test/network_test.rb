@@ -23,12 +23,18 @@ class Person < ActiveRecord::Base
   # simple network relation through a has_and_belongs_to_many table
   acts_as_network :connections
   
+  # network relations has_and_belongs_to_many with custom table and foreign_key names
   acts_as_network :friends, :join_table => :friends, :foreign_key => 'person_id', 
                   :association_foreign_key => 'person_id_friend'
   
+  # network relationship with has_many_through and overrides
   acts_as_network :colleagues, :through => :invites, 
                   :foreign_key => 'person_id', :association_foreign_key => 'person_id_target', 
                   :conditions => ["is_accepted = 't'"]
+                  
+  # simple usage of acts_as_union to combine friends and colleagues sets
+  acts_as_union   :associates, [:friends, :colleagues]
+                                 
 end
 
 class Invite < ActiveRecord::Base
@@ -122,13 +128,13 @@ class UnionCollectionTest < Test::Unit::TestCase
   
   def test_empty_sets
     assert_equal Zetetic::Acts::UnionCollection.new().size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new().to_a, []
+    assert_equal Zetetic::Acts::UnionCollection.new().to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new([],[]).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],[]).to_a, []
+    assert_equal Zetetic::Acts::UnionCollection.new([],[]).to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).to_a, []
+    assert_equal Zetetic::Acts::UnionCollection.new(nil,nil).to_ary, []
     assert_equal Zetetic::Acts::UnionCollection.new([],nil).size, 0
-    assert_equal Zetetic::Acts::UnionCollection.new([],nil).to_a, []
+    assert_equal Zetetic::Acts::UnionCollection.new([],nil).to_ary, []
   end
   
   def test_mixed_sets
@@ -243,7 +249,7 @@ class ActsAsNetworkTest < Test::Unit::TestCase
 
     jane.reload and jack.reload and alex.reload
 
-    assert_equal [alex].to_a, jack.colleagues.find(:all, :conditions => { :name => "Alex" }).to_a
+    assert_equal [alex].to_ary, jack.colleagues.find(:all, :conditions => { :name => "Alex" }).to_ary
   end
   
   def test_outbound_habtm
